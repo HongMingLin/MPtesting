@@ -1,17 +1,22 @@
 import Foundation
 
 /*
+ 
  Observer pattern
+ 
  */
-protocol Subscriber {
+
+//Define protocol
+protocol Subscriber:class {
     func notifly(news:String)
 }
 
-protocol Subjust {
+protocol SubjectManager {
     func addCustom(subscriber:Subscriber)
     func removeCustom(subscriber:Subscriber)
 }
 
+//Implement class
 class Custom:Subscriber {
     private var user:String
     
@@ -24,7 +29,7 @@ class Custom:Subscriber {
     }
 }
 
-class SubjectManager:Subjust {
+class Newspaper:SubjectManager {
     private var subscribers = [Subscriber]()
     
     func addCustom(subscriber:Subscriber) {
@@ -32,7 +37,7 @@ class SubjectManager:Subjust {
     }
     
     func removeCustom(subscriber:Subscriber) {
-        
+        subscribers = subscribers.filter{ $0 !== subscriber }
     }
     
     func sendNews(news:String) {
@@ -42,15 +47,24 @@ class SubjectManager:Subjust {
     }
 }
 
+
+//make subject
 let tony = Custom(name:"Tony")
 let allen = Custom(name:"Allen")
 
-let newspaper = SubjectManager()
+let newspaper = Newspaper()
+//register listeners
 newspaper.addCustom(subscriber: tony)
 newspaper.addCustom(subscriber: allen)
+newspaper.sendNews(news: "Taiwan Tourism Bureau reveals top 5 destinations under stimulus program")
+newspaper.removeCustom(subscriber:allen)
+newspaper.sendNews(news: "MOST launches new ocean research vessel in Keelung")
 
-newspaper.sendNews(news: "test")
-
+/*
+ 
+ Factory pattern
+ 
+ */
 
 
 enum OperatorType {
@@ -60,6 +74,7 @@ enum OperatorType {
     case Divide
 }
 
+//Define Factory
 class Operation {
     private var operand1: Int
     private var operand2: Int
@@ -85,6 +100,7 @@ class Operation {
     
 }
 
+//Concreate
 class Plus : Operation {
     init(operand1: Int, operand2: Int) {
         super.init()
